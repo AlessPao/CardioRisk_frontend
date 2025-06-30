@@ -182,7 +182,7 @@ export const PatientForm: React.FC<PatientFormProps> = ({ onSubmit, isLoading })
       {/* Wellness */}
       <FormSection title="Bienestar" icon={<Brain className="w-5 h-5 text-purple-600" />}>
         <FormField label={`Nivel de Estrés (${formData.stress_level}/10)`} error={errors.stress_level} required>
-          <div className="space-y-2">
+          <div className="space-y-3">
             <input
               type="range"
               value={formData.stress_level}
@@ -193,9 +193,24 @@ export const PatientForm: React.FC<PatientFormProps> = ({ onSubmit, isLoading })
               step="1"
             />
             <div className="flex justify-between text-xs text-gray-500">
-              <span>Muy bajo</span>
-              <span>Moderado</span>
-              <span>Muy alto</span>
+              <span>1 - Muy bajo</span>
+              <span>5 - Moderado</span>
+              <span>10 - Muy alto</span>
+            </div>
+            <div className="text-center">
+              <span className={`inline-block px-3 py-1 rounded-full text-sm font-medium ${
+                formData.stress_level <= 3
+                  ? 'bg-green-100 text-green-800'
+                  : formData.stress_level <= 6
+                  ? 'bg-yellow-100 text-yellow-800'
+                  : 'bg-red-100 text-red-800'
+              }`}>
+                {formData.stress_level <= 3 
+                  ? '🟢 Bajo' 
+                  : formData.stress_level <= 6 
+                  ? '🟡 Moderado' 
+                  : '🔴 Alto'}
+              </span>
             </div>
           </div>
         </FormField>
@@ -204,12 +219,23 @@ export const PatientForm: React.FC<PatientFormProps> = ({ onSubmit, isLoading })
       <button
         type="submit"
         disabled={isLoading}
-        className="w-full bg-blue-600 text-white py-3 px-6 rounded-xl font-semibold text-lg
-                 hover:bg-blue-700 disabled:bg-gray-400 disabled:cursor-not-allowed
-                 transition-all duration-200 transform hover:scale-[1.02] active:scale-[0.98]
-                 shadow-lg hover:shadow-xl"
+        className="w-full bg-gradient-to-r from-blue-600 to-blue-700 text-white py-4 px-6 rounded-xl font-semibold text-lg
+                 hover:from-blue-700 hover:to-blue-800 disabled:from-gray-400 disabled:to-gray-500 disabled:cursor-not-allowed
+                 transition-all duration-300 transform hover:scale-[1.02] active:scale-[0.98]
+                 shadow-lg hover:shadow-xl disabled:shadow-none
+                 flex items-center justify-center space-x-2"
       >
-        {isLoading ? 'Analizando...' : 'Evaluar Riesgo Cardiovascular'}
+        {isLoading ? (
+          <>
+            <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white"></div>
+            <span>Analizando...</span>
+          </>
+        ) : (
+          <>
+            <Heart className="w-5 h-5" />
+            <span>Evaluar Riesgo Cardiovascular</span>
+          </>
+        )}
       </button>
     </form>
   );
